@@ -27,7 +27,7 @@ public class ExpList<E> implements Iterable<E> {
     }
 
     public ExpList() {
-        this.elementData = DEFAULT_CAPACITY_EMPTY_DATA;
+        this.elementData = new Object[DEFAULT_CAPACITY];
     }
 
     public ExpList(Collection<? extends E> collection) {
@@ -43,9 +43,9 @@ public class ExpList<E> implements Iterable<E> {
 
     public void clone(ExpList<E> expList) {
         this.size = expList.size;
-        this.elementData = new Object[expList.elementData.length];
-        System.arraycopy(expList.elementData, 0, this.elementData, 0, expList.size);
+        this.elementData = Arrays.copyOf(expList.elementData, expList.elementData.length);
     }
+
     /**Так как в Java нет деструкторов, то украл, кхм, позаимствовал реализацию из интерфейса AutoClosable*/
     public void close() throws Exception {
         elementData = null;
@@ -61,11 +61,11 @@ public class ExpList<E> implements Iterable<E> {
     }
 
     public boolean isNull() {
-        return elementData != null;
+        return elementData == null;
     }
 
     public boolean isNullOrEmpty() {
-        return size == 0 || elementData == null;
+        return isEmpty() || isNull();
     }
 
     public E get(int index) throws IndexOutOfBoundsException {
@@ -101,23 +101,24 @@ public class ExpList<E> implements Iterable<E> {
     }
 
     public void changeCapacity() {
+        System.out.println("Changing capacity. Current size: " + size + ", current capacity: " + elementData.length);
         if (elementData == DEFAULT_CAPACITY_EMPTY_DATA) {
-            elementData = new Object[DEFAULT_CAPACITY];
-        } else if (size == elementData.length) {
-            ExpList<E> newExpList = new ExpList<>(elementData.length * 2);
-            newExpList.clone(this);
-            elementData = newExpList.elementData;
-        } else if (size == elementData.length / 2 && size > DEFAULT_CAPACITY) {
-            ExpList<E> newExpList = new ExpList<>(elementData.length / 2);
-            newExpList.clone(this);
-            elementData = newExpList.elementData;
+            ExpList<E> newExpList = new ExpList<>(DEFAULT_CAPACITY);
+            this.clone(newExpList);
+        } else if (size >= elementData.length) {
+            ExpList<E> newExpList = new ExpList<>(this.elementData.length * 2);
+            for (Object element: this.elementData) {
+                newExpList.add((E) element);
+            }
+            this.clone(newExpList);
+            System.out.println("Increased capacity to: " + elementData.length);
         }
     }
 
     public void add(E element) {
-        size++;
         changeCapacity();
         elementData[size] = element;
+        size++;
     }
 
     public void add(E element, int index) {
@@ -130,7 +131,7 @@ public class ExpList<E> implements Iterable<E> {
         size++;
     }
 
-    public void delete(E element) {
+    public void deleteByIndex(E element) {
         int newSize = 0;
         for (int i = 0; i < size; i++) {
             if (!elementData[i].equals(element)) {
@@ -139,17 +140,15 @@ public class ExpList<E> implements Iterable<E> {
         }
         Arrays.fill(elementData, newSize, size, null);
         size = newSize;
-        changeCapacity();
     }
 
-    public void delete(int index) {
+    public void deleteByIndex(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Индекс: " + index + ", Размер: " + size);
         }
         elementData[index] = null;
         System.arraycopy(elementData, index + 1, elementData, index, size - index - 1);
         elementData[size--] = null;
-        changeCapacity();
     }
     /**не представляю, как реализовать end() на джаве, но его аналогом частично может выступить hasNext(), за тем исключением, что end()
      выставляет маркер на позиции после последнего элемента, а hasNext() определяет, есть ли следующий элемент,
