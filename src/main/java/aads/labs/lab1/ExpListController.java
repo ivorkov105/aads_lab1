@@ -93,7 +93,7 @@ public class ExpListController {
                 default -> null;
             };
         } catch (NumberFormatException e) {
-            System.out.println("Failed to parse input: " + input);
+            errorLabel.setText("Неправильный формат данных: " + e.getMessage());
             return null;
         }
     }
@@ -172,11 +172,10 @@ public class ExpListController {
                 infoLabel.setText("Коллекция " + expList + " удалена");
                 expList.close();
                 expList = null;
-                closeOrInitButton.setText("Создать коллекцию");
+                elementListView.getItems().clear();
             } else {
                 expList = new ExpList<>();
                 infoLabel.setText("Коллекция " + expList + " создана");
-                closeOrInitButton.setText("Удалить коллекцию");
             }
         } catch (Exception e) {
             errorLabel.setText(e.getMessage());
