@@ -10,6 +10,7 @@ module aads.labs.lab1 {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires jdk.unsupported.desktop;
 
     opens aads.labs.lab1 to javafx.fxml;
     exports aads.labs.lab1;

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.layout.GridPane?>
+<VBox fx:id="container"
+      alignment="CENTER" spacing="10.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="aads.labs.lab1.TestingController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Label text="Тестирование операций с коллекцией"/>
+
+    <TextField fx:id="elementsCountInput" promptText="Введите количество элементов"/>
+
+    <GridPane fx:id="buttonGrid" alignment="CENTER" hgap="10" vgap="10">
+        <Button fx:id="testInsertButton" text="Тест вставки" onAction="#onTestInsert" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <Button fx:id="testRetrieveButton" text="Тест извлечения" onAction="#onTestRetrieve" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Button fx:id="testDeleteButton" text="Тест удаления" onAction="#onTestDelete" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+
+        <Button fx:id="createInsertChartButton" text="График вставки" onAction="#onCreateInsert" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Button fx:id="createRetrieveChartButton" text="График извлечения" onAction="#onCreateRetrieve" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Button fx:id="createDeleteChartButton" text="График удаления" onAction="#onCreateDelete" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+    </GridPane>
+
+    <Label fx:id="testResultLabel" text="Результаты теста будут здесь"/>
+</VBox>

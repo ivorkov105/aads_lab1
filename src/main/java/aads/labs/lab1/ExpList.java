@@ -131,7 +131,7 @@ public class ExpList<E> implements Iterable<E> {
         size++;
     }
 
-    public void deleteByIndex(E element) {
+    public void delete(E element) {
         int newSize = 0;
         for (int i = 0; i < size; i++) {
             if (!elementData[i].equals(element)) {
